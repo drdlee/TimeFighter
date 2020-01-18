@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fillAfter="true"
+    android:interpolator="@android:anim/bounce_interpolator">
+    <!--
+    1.  fillAfter is set to true,
+        which means the animation won’t reset the View to
+        its original position once it’s complete. Instead,
+        the View remains wherever it is when the animation ends
+
+    2.  Interpolators affect the rate the entire animation is performed over time,
+    -->
+
+    <scale
+        android:duration="2000"
+        android:fromXScale="2.0"
+        android:fromYScale="2.0"
+        android:pivotX="50%"
+        android:pivotY="50%"
+        android:toXScale="1.0"
+        android:toYScale="1.0" />
+    <!--
+    Scale,
+    - duration, animation will run within 2000ms / 2sec
+    - fromXScale/fromYScale, the scale that the View start animating
+    - pivotX/pivotY, pivot/anchor of the view that we're animating
+    - toXScale/toYScale, the size of the view when the animation end
+    -->
+</set>

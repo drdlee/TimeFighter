@@ -1,18 +1,19 @@
 package com.example.timefighter
 
-import android.nfc.Tag
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
-import android.view.View
+import android.view.Menu
+import android.view.MenuItem
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 
 class MainActivity : AppCompatActivity() {
-
-    private val TAG = "MainActivity";
 
     private lateinit var gameScoreTextView: TextView
     private lateinit var timeLeftTextView: TextView
@@ -27,8 +28,8 @@ class MainActivity : AppCompatActivity() {
     private var timeLeft = 60
 
     companion object {
-        private val SCORE_KEY = "SCORE_KEY"
-        private val TIME_LEFT_KEY = "TIME_LEFT_KEY"
+        private const val SCORE_KEY = "SCORE_KEY"
+        private const val TIME_LEFT_KEY = "TIME_LEFT_KEY"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,14 +41,17 @@ class MainActivity : AppCompatActivity() {
         timeLeftTextView = findViewById(R.id.time_left_text_view)
         tapMeButton = findViewById(R.id.tap_me_button)
 
-        tapMeButton.setOnClickListener { incrementScore() }
+        tapMeButton.setOnClickListener { v ->
+            val bounceAnimation = AnimationUtils.loadAnimation(this, R.anim.bounce)
+            v.startAnimation(bounceAnimation)
+            incrementScore()
+        }
 
         if (savedInstanceState != null) {
             score = savedInstanceState.getInt(SCORE_KEY)
             timeLeft = savedInstanceState.getInt(TIME_LEFT_KEY)
             restoreGame()
-        }
-        else{
+        } else {
             resetGame()
         }
     }
@@ -65,6 +69,29 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         Log.d("MainActivity", "onDestroy: onDestroyed called.")
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        super.onCreateOptionsMenu(menu)
+        menuInflater.inflate(R.menu.menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.about_item) {
+            showInfo()
+        }
+        return true
+    }
+
+    private fun showInfo() {
+        val dialogTitle = getString(R.string.about_title, BuildConfig.VERSION_NAME)
+        val dialogMessage = getString(R.string.about_message)
+
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(dialogTitle)
+        builder.setMessage(dialogMessage)
+        builder.create().show()
     }
 
     private fun incrementScore() {
